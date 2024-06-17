@@ -32,39 +32,4 @@ public class Prime
         return factors;
     }
     
-    // Hole alle Primzahlen von 2 bis n
-    public static List<int> GetPrimes(int n)
-    {
-        // Initialisiere eine Liste zur Speicherung der Primzahlen
-        var primes = new List<int>();
-
-        // Schleife von 2 bis n
-        for (int i = 2; i <= n; i++)
-        {
-            // Nimm an, die Zahl ist prim
-            bool isPrime = true;
-
-            // Schleife durch alle Zahlen von 2 bis zur Quadratwurzel von i
-            for (int j = 2; j * j <= i; j++)
-            {
-                // Wenn i durch j teilbar ist
-                if (i % j == 0)
-                {
-                    // i ist nicht prim
-                    isPrime = false;
-                    break;
-                }
-            }
-
-            // Wenn i prim ist
-            if (isPrime)
-            {
-                // Füge i zur Liste der Primzahlen hinzu
-                primes.Add(i);
-            }
-        }
-
-        // Gib die Liste der Primzahlen zurück
-        return primes;
-    }
 }
