@@ -3,7 +3,13 @@ using IBANLib;
 
 while (true)
 {
-    Console.WriteLine("Enter mode (1 for Euklid, 2 for Prime, 3 for Iban, 4 for modulo, 5 for RSA):");
+    // TODO: Add ACSCII logo
+    
+    Console.WriteLine("1 for Euklid");
+    Console.WriteLine("2 for Prime");
+    Console.WriteLine("3 for Iban");
+    Console.WriteLine("4 for modulo");
+    Console.WriteLine("5 for RSA");
     var mode = Console.ReadLine();
 
     switch (mode)
@@ -53,11 +59,15 @@ while (true)
         case "3":
             Console.WriteLine("You have entered Iban Mode");
             Console.WriteLine("Enter the IBAN:");
+            
             var iban = Console.ReadLine();
-
-            var isValid = Iban.ValidateIBAN(iban);
-
-            Console.WriteLine(isValid);
+            if (iban != null)
+            {
+                iban = iban.Trim();
+                var isValid = Iban.ValidateIBAN(iban);
+                
+                Console.WriteLine(isValid);
+            }
 
             break;
         case "4":
@@ -74,16 +84,16 @@ while (true)
             Console.WriteLine("Enter two prime numbers:");
             var p = int.Parse(Console.ReadLine());
             var q = int.Parse(Console.ReadLine());
-            var keys = RSA.GenerateKeys(p, q);
+            var keys = Rsa.GenerateKeys(p, q);
             Console.WriteLine($"Public key: {keys[0]}, Private key: {keys[1]}, N: {keys[2]}");
             Console.WriteLine("Enter a message to encrypt:");
             var message = Console.ReadLine();
-            var encrypted = RSA.Encrypt(message, keys[0], keys[2]);
+            var encrypted = Rsa.Encrypt(message, keys[0], keys[2]);
             foreach (var c in encrypted)
             {
                 Console.Write($"{c} ");
             }
-            var decrypted = RSA.Decrypt(encrypted, keys[1], keys[2]);
+            var decrypted = Rsa.Decrypt(encrypted, keys[1], keys[2]);
             Console.WriteLine($"Decrypted message: {decrypted}");
             
             break;

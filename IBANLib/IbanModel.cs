@@ -72,7 +72,13 @@ namespace IBANLib
                 }
                 else
                 {
-                    string correctedIban = CalculateCorrectChecksum(iban);
+                    var correctedIban = CalculateCorrectChecksum(iban).ToCharArray();
+                    // add a whitespace every 4 chars
+                    for (int i = 4; i < correctedIban.Length; i += 5)
+                    {
+                        correctedIban[i] = ' ';
+                    }
+                    
                     return $"The IBAN is invalid. Corrected IBAN: {correctedIban}";
                 }
             }
