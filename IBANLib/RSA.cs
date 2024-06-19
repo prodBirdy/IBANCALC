@@ -9,6 +9,25 @@ namespace IBANLib;
 public static class Rsa
 {
     /// <summary>
+    /// Berechnet (baseValue^exponent) % modulus effizient.
+    /// </summary>
+    /// <param name="baseValue">Die Basis.</param>
+    /// <param name="exponent">Der Exponent.</param>
+    /// <param name="modulus">Der Modul.</param>
+    /// <returns>Das Ergebnis der Modulo-Exponentiation.</returns>
+    public static BigInteger ModPowt(BigInteger baseValue, BigInteger exponent, BigInteger modulus)
+    {
+        BigInteger result = 1;
+        while (exponent > 0)
+        {
+            if (exponent % 2 == 1)
+                result = (result * baseValue) % modulus;
+            exponent = exponent >> 1;
+            baseValue = (baseValue * baseValue) % modulus;
+        }
+        return result;
+    }
+    /// <summary>
     /// Wandelt einen String in ein Array von ASCII-Zahlen um.
     /// </summary>
     /// <param name="message">Der zu konvertierende String.</param>
@@ -71,41 +90,36 @@ public static class Rsa
     /// <returns>Ein Array, das den öffentlichen Schlüssel Exponent (e), den privaten Schlüssel Exponent (d) und den Modul (n) enthält.</returns>
     public static int[] GenerateKeys(int p, int q)
     {
-        int n = p * q;
-        int phi = (p - 1) * (q - 1);
-        int e = phi - 1;
+        var n = p * q;
+        var phi = (p - 1) * (q - 1);
+        var e = phi - 1;
 
         while (e > 1 && Euklid.Gcd(e, phi) != 1)
         {
             e--;
         }
 
-        int d = 2;
+        var d = 2;
         while (Modulo.Mod(d * e, phi) != 1)
         {
             d++;
         }
 
-        return new int[] { e, d, n };
+        return [e, d, n];
     }
 
-    /// <summary>
-    /// Berechnet (baseValue^exponent) % modulus effizient.
-    /// </summary>
-    /// <param name="baseValue">Die Basis.</param>
-    /// <param name="exponent">Der Exponent.</param>
-    /// <param name="modulus">Der Modul.</param>
-    /// <returns>Das Ergebnis der Modulo-Exponentiation.</returns>
-    public static BigInteger ModPow(BigInteger baseValue, BigInteger exponent, BigInteger modulus)
+    public static int[] GenerateKeys(int e ,int p, int q)
+{
+    var n = p * q;
+    var phi = (p - 1) * (q - 1);
+    
+    var d = 2;
+    while (Modulo.Mod(d * e, phi) != 1)
     {
-        BigInteger result = 1;
-        while (exponent > 0)
-        {
-            if (exponent % 2 == 1)
-                result = (result * baseValue) % modulus;
-            exponent = exponent >> 1;
-            baseValue = (baseValue * baseValue) % modulus;
-        }
-        return result;
+        d++;
     }
+
+    return [e, d, n];
+}
+
 }

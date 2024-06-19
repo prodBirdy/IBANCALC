@@ -27,29 +27,32 @@ while (true)
             Console.WriteLine("You've entered Prime mode.");
             Console.WriteLine("Enter numbers separated by commas (e.g., 1,2,5):");
             var input = Console.ReadLine();
-            var numbers = input.Split(',').Select(int.Parse).ToList();
-
-            var factors = new Dictionary<int, List<int>>();
-            foreach (var number in numbers)
+            if (input != null)
             {
-                factors[number] = Prime.PrimeFactorization(number);
-                Console.WriteLine($"The prime factors of {number} are: {string.Join(", ", factors[number])}");
-            }
+                var numbers = input.Split(',').Select(int.Parse).ToList();
 
-            for (int i = 0; i < numbers.Count; i++)
-            {
-                for (int j = i + 1; j < numbers.Count; j++)
+                var factors = new Dictionary<int, List<int>>();
+                foreach (var number in numbers)
                 {
-                    var commonFactors = factors[numbers[i]].Intersect(factors[numbers[j]]);
-                    if (commonFactors.Any())
+                    factors[number] = Prime.PrimeFactorization(number);
+                    Console.WriteLine($"The prime factors of {number} are: {string.Join(", ", factors[number])}");
+                }
+
+                for (int i = 0; i < numbers.Count; i++)
+                {
+                    for (int j = i + 1; j < numbers.Count; j++)
                     {
-                        var product = commonFactors.Aggregate((total, next) => total * next);
-                        Console.WriteLine(
-                            $"The product of the common factors of {numbers[i]} and {numbers[j]} is {product}.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"There are no common factors between {numbers[i]} and {numbers[j]}.");
+                        var commonFactors = factors[numbers[i]].Intersect(factors[numbers[j]]);
+                        if (commonFactors.Any())
+                        {
+                            var product = commonFactors.Aggregate((total, next) => total * next);
+                            Console.WriteLine(
+                                $"The product of the common factors of {numbers[i]} and {numbers[j]} is {product}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"There are no common factors between {numbers[i]} and {numbers[j]}.");
+                        }
                     }
                 }
             }
@@ -81,10 +84,28 @@ while (true)
 
         case "5":
             Console.WriteLine("You have entered RSA Mode");
-            Console.WriteLine("Enter two prime numbers:");
-            var p = int.Parse(Console.ReadLine());
-            var q = int.Parse(Console.ReadLine());
-            var keys = Rsa.GenerateKeys(p, q);
+            Console.WriteLine("Do you have e? (y/n)");
+            var response = Console.ReadLine();
+            int[] keys;
+            if (response.ToLower() == "y")
+            {
+                Console.WriteLine("Enter e:");
+                var e = int.Parse(Console.ReadLine());
+                Console.WriteLine("Enter p:");
+                var p = int.Parse(Console.ReadLine());
+                Console.WriteLine("Enter q:");
+                var q = int.Parse(Console.ReadLine());
+                keys = Rsa.GenerateKeys(e, p, q);
+
+            }
+            else
+            {
+                Console.WriteLine("Enter two prime numbers:");
+                var p = int.Parse(Console.ReadLine());
+                var q = int.Parse(Console.ReadLine());
+                keys = Rsa.GenerateKeys(p, q);
+
+            }
             Console.WriteLine($"Public key: {keys[0]}, Private key: {keys[1]}, N: {keys[2]}");
             Console.WriteLine("Enter a message to encrypt:");
             var message = Console.ReadLine();
@@ -95,7 +116,6 @@ while (true)
             }
             var decrypted = Rsa.Decrypt(encrypted, keys[1], keys[2]);
             Console.WriteLine($"Decrypted message: {decrypted}");
-            
             break;
         case "exit":
 
