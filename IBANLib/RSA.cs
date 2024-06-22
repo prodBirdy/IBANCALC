@@ -15,18 +15,18 @@ public static class Rsa
     /// <param name="exponent">Der Exponent.</param>
     /// <param name="modulus">Der Modul.</param>
     /// <returns>Das Ergebnis der Modulo-Exponentiation.</returns>
-    public static BigInteger ModPowt(BigInteger baseValue, BigInteger exponent, BigInteger modulus)
+public static BigInteger ModPow(BigInteger baseValue, BigInteger exponent, BigInteger modulus)
+{
+    BigInteger result = 1;
+    while (exponent > 0)
     {
-        BigInteger result = 1;
-        while (exponent > 0)
-        {
-            if (exponent % 2 == 1)
-                result = (result * baseValue) % modulus;
-            exponent = exponent >> 1;
-            baseValue = (baseValue * baseValue) % modulus;
-        }
-        return result;
+        if (exponent % 2 == 1)
+            result = (result * baseValue) % modulus;
+        exponent = exponent >> 1;
+        baseValue = (baseValue * baseValue) % modulus;
     }
+    return result;
+}
     /// <summary>
     /// Wandelt einen String in ein Array von ASCII-Zahlen um.
     /// </summary>
@@ -75,7 +75,7 @@ public static class Rsa
         string decryptedMessage = "";
         foreach (var number in message)
         {
-            var num = BigInteger.ModPow(number, d, n);
+            var num = ModPow(number, d, n);
             decryptedMessage += (char)(int)num;
         }
 
