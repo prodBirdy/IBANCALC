@@ -78,8 +78,8 @@ namespace IBANLib
                     {
                         correctedIban[i] = ' ';
                     }
-                    
-                    return $"The IBAN is invalid. Corrected IBAN: {correctedIban}";
+            
+                    return $"The IBAN is invalid. Corrected IBAN: {new string(correctedIban)}";
                 }
             }
             return "The IBAN length is invalid.";
